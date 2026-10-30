@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { NicheArticle } from '@/types/football';
 import { NICHE_ARTICLES } from '@/lib/niche-content';
 import {
@@ -9,6 +10,7 @@ import {
   CheckCircle2,
   ChevronRight,
   Clock,
+  ExternalLink,
   Share2,
   Sparkles,
 } from 'lucide-react';
@@ -24,7 +26,7 @@ export function NicheContentHub() {
   });
 
   function copyShareArticle(art: NicheArticle) {
-    const url = typeof window !== 'undefined' ? `${window.location.origin}/#${art.slug}` : '';
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/guides/${art.slug}` : '';
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(`${art.title} — ${url}`);
     }
@@ -137,6 +139,12 @@ export function NicheContentHub() {
             </div>
 
             <div className="flex items-center gap-2">
+              <Link
+                href={`/guides/${selectedArticle.slug}`}
+                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-slate-200 inline-flex items-center gap-1.5"
+              >
+                Full Page <ExternalLink className="w-3 h-3 text-emerald-400" />
+              </Link>
               <button
                 type="button"
                 onClick={() =>
