@@ -1,0 +1,173 @@
+FOOTBALL / SPORTS NICHE WEBSITE PLAN
+=====================================
+Date: 30 October 2026
+
+1. WEBSITE FOCUS (Choose ONE main angle)
+---------------------------------------
+Recommended starting focus:
+- Match Previews + Tactical Analysis + Post-Match Reviews
+  (Focus on top 5 European leagues + Champions League)
+
+Alternative focused angles:
+- Fantasy Football tips & analysis
+- Football Gear Reviews (boots, kits, training equipment)
+- Youth Development / Coaching & Training content
+- One specific league deep-dive (e.g. Premier League only)
+
+Tip: Start narrow. Expand later.
+
+
+2. TARGET AUDIENCE
+------------------
+- Football fans who want deeper analysis (not just scores)
+- Fantasy players
+- People looking for gear recommendations
+- Coaches and young players (if training angle)
+
+
+3. CORE CONTENT PILLARS
+-----------------------
+A. Timely Content (during season)
+   - Match previews (key battles, predicted lineups, form)
+   - Post-match analysis
+   - Weekly roundups
+   - Injury & team news summary
+
+B. Evergreen Content
+   - Tactical guides (formations, pressing styles, set-pieces)
+   - Player / manager profiles
+   - Gear reviews & buying guides
+   - Training drills and coaching tips
+   - "Best of" lists (best young players, best free transfers, etc.)
+
+C. Data-Driven Content
+   - League tables & form guides
+   - Head-to-head statistics
+   - Expected goals (xG) insights when available
+
+
+4. TECHNICAL SETUP
+------------------
+Platform options:
+- WordPress (easiest for beginners + good SEO plugins)
+- Next.js / modern static site (faster, more control)
+- Webflow or Framer (no-code option)
+
+Must-have features:
+- Clean mobile-friendly design
+- Fast loading speed
+- SEO-friendly structure
+- Email newsletter signup
+- Social sharing buttons
+
+Domain ideas:
+- Something short and memorable related to tactics, analysis, or football insights
+
+
+5. FREE API PLAN (Data Source)
+------------------------------
+Primary API: football-data.org (Recommended)
+
+Why:
+- Free forever for 12 major competitions
+- 10 requests per minute (much more usable than 100/day)
+- Clean and reliable data
+- Perfect for fixtures, results, standings, teams
+
+How to use:
+- Get free API token from https://www.football-data.org/
+- Cache data heavily (store fixtures & standings for several hours)
+- Use for:
+  - Upcoming fixtures
+  - League tables
+  - Match results
+  - Team information
+
+Backup / Extra API:
+- API-Football (free tier: 100 requests/day) → use only when you need more leagues or live scores
+
+
+6. MONETIZATION PLAN
+--------------------
+Phase 1 (0–10k monthly visitors):
+- Google AdSense or Ezoic
+- Affiliate links (Amazon, sports retailers for boots/kits)
+- Email list building
+
+Phase 2 (10k–50k visitors):
+- Higher-paying ad networks (Mediavine etc. when eligible)
+- Sponsored posts
+- Digital products (fantasy guides, tactical ebooks, training plans)
+
+Phase 3 (50k+ visitors):
+- Premium membership / paid newsletter
+- Merch (print-on-demand)
+- Bigger brand sponsorships
+
+
+7. TRAFFIC STRATEGY
+-------------------
+Main channels:
+1. SEO (most important long-term)
+   - Target long-tail keywords: "Arsenal vs Liverpool preview", "best formation against low block", "best football boots 2026 under $150"
+2. Social Media
+   - X (Twitter) for quick analysis and threads
+   - Instagram / TikTok for short video clips of tactics
+3. Communities
+   - Reddit (r/soccer, fantasy football subreddits)
+   - Facebook groups
+   - Discord communities
+4. Email Newsletter
+   - Weekly preview + tips
+
+
+8. 90-DAY ACTION PLAN
+---------------------
+Week 1–2:
+- Choose exact niche angle
+- Register domain + hosting
+- Set up website structure
+- Get football-data.org API key
+- Write first 5–7 articles
+
+Week 3–4:
+- Publish consistently (3–4 articles per week)
+- Set up Google Analytics + Search Console
+- Start basic SEO (titles, meta descriptions, internal links)
+- Create social media accounts
+
+Month 2:
+- Build email list
+- Add affiliate links to gear-related posts
+- Improve design and speed
+- Start promoting on social media and Reddit
+
+Month 3:
+- Analyze what content performs best
+- Double down on winning topics
+- Apply for better ad networks if traffic is growing
+- Create first digital product idea
+
+
+9. SUCCESS METRICS
+------------------
+Track these monthly:
+- Organic traffic growth
+- Email subscribers
+- Average time on page
+- Affiliate clicks / revenue
+- Ad revenue
+
+
+10. IMPORTANT TIPS
+------------------
+- Consistency beats perfection
+- Focus on one league or angle first
+- Always cache API data (never call the API on every page load)
+- Write helpful, opinionated content (not just copy scores)
+- Build an email list from day one
+- Be patient — most sites take 6–12 months to grow meaningfully
+
+=====================================
+End of Plan
+Ready to start building when you are.
