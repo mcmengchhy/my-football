@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { Match, StandingRow } from '@/types/football';
 import { LEAGUES, STANDINGS_BY_LEAGUE } from '@/lib/mock-data';
+import { NICHE_ARTICLES } from '@/lib/niche-content';
 import { TeamCrest } from '@/components/TeamCrest';
 import { BrandLogo } from '@/components/BrandLogo';
 import { MatchCenter } from '@/components/MatchCenter';
@@ -948,44 +950,68 @@ export default function FootballLiveScorePage() {
       </main>
 
       {/* FOOTER */}
-      <footer className="relative z-10 border-t border-white/10 bg-[#050911] py-6 px-4 sm:px-6 mt-10">
-        <div className="max-w-[1480px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div className="flex items-center gap-2.5">
-            <BrandLogo size="sm" onClick={() => setActiveNav('matches')} />
-            <span>•</span>
-            <span>Football Match Previews, Tactical Analysis &amp; 2D Match Center</span>
+      <footer className="relative z-10 border-t border-white/10 bg-[#050911] py-8 px-4 sm:px-6 mt-10">
+        <div className="max-w-[1480px] mx-auto space-y-6 text-xs text-slate-400">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <BrandLogo size="sm" onClick={() => setActiveNav('matches')} />
+              <span>•</span>
+              <span>Football Match Previews, Tactical Analysis &amp; 2D Match Center</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setActiveNav('matches')}
+                className="hover:text-emerald-400 cursor-pointer"
+              >
+                Matches &amp; Previews
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveNav('tactics')}
+                className="hover:text-emerald-400 cursor-pointer"
+              >
+                Tactical Guides
+              </button>
+              <a
+                href="/sitemap.xml"
+                className="hover:text-emerald-400"
+              >
+                Sitemap
+              </a>
+              <a
+                href="https://www.reddit.com/r/soccer"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white"
+              >
+                r/soccer
+              </a>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-white"
+              >
+                X (Twitter)
+              </a>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <button
-              type="button"
-              onClick={() => setActiveNav('matches')}
-              className="hover:text-emerald-400 cursor-pointer"
-            >
-              Matches &amp; Previews
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveNav('tactics')}
-              className="hover:text-emerald-400 cursor-pointer"
-            >
-              Tactical Guides
-            </button>
-            <a
-              href="https://www.reddit.com/r/soccer"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-white"
-            >
-              r/soccer
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-white"
-            >
-              X (Twitter)
-            </a>
+
+          {/* Direct Crawlable SEO Links for Search Engines */}
+          <div className="pt-4 border-t border-white/5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-slate-500">
+            <span className="font-bold uppercase tracking-wider text-slate-400">
+              Featured Guides:
+            </span>
+            {NICHE_ARTICLES.map((art) => (
+              <Link
+                key={art.id}
+                href={`/guides/${art.slug}`}
+                className="hover:text-emerald-400 transition-colors"
+              >
+                {art.seoKeyword}
+              </Link>
+            ))}
           </div>
         </div>
       </footer>
