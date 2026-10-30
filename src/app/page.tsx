@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Match, StandingRow } from '@/types/football';
 import { LEAGUES, STANDINGS_BY_LEAGUE } from '@/lib/mock-data';
 import { TeamCrest } from '@/components/TeamCrest';
+import { BrandLogo } from '@/components/BrandLogo';
 import { MatchCenter } from '@/components/MatchCenter';
 import { NicheContentHub } from '@/components/NicheContentHub';
 import {
@@ -193,35 +194,10 @@ export default function FootballLiveScorePage() {
       <header className="sticky top-0 z-30 border-b border-white/10 bg-[#070d19]/90 backdrop-blur-xl">
         <div className="max-w-[1480px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           {/* Brand Logo */}
-          <div
+          <BrandLogo
+            liveCount={liveCount}
             onClick={() => setActiveNav('matches')}
-            className="flex items-center gap-3 cursor-pointer shrink-0"
-          >
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 font-black shadow-lg shadow-emerald-500/25">
-              <Activity className="w-5 h-5 stroke-[2.5]" />
-              {liveCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-400 border-2 border-slate-950" />
-                </span>
-              )}
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-black tracking-tight text-white">
-                  PITCH<span className="text-emerald-400">PULSE</span>
-                </span>
-                {liveCount > 0 && (
-                  <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                    <Radio className="w-2.5 h-2.5" /> {liveCount} LIVE
-                  </span>
-                )}
-              </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">
-                Match Previews • Tactical Analysis • Top 5 Leagues &amp; UCL
-              </p>
-            </div>
-          </div>
+          />
 
           {/* Primary Public Navigation */}
           <nav className="hidden lg:flex items-center gap-1 p-1 rounded-2xl bg-slate-950/80 border border-white/10">
@@ -974,10 +950,8 @@ export default function FootballLiveScorePage() {
       {/* FOOTER */}
       <footer className="relative z-10 border-t border-white/10 bg-[#050911] py-6 px-4 sm:px-6 mt-10">
         <div className="max-w-[1480px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-white">
-              PITCH<span className="text-emerald-400">PULSE</span>
-            </span>
+          <div className="flex items-center gap-2.5">
+            <BrandLogo size="sm" onClick={() => setActiveNav('matches')} />
             <span>•</span>
             <span>Football Match Previews, Tactical Analysis &amp; 2D Match Center</span>
           </div>

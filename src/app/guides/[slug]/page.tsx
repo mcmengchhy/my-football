@@ -3,8 +3,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { NICHE_ARTICLES } from '@/lib/niche-content';
+import { BrandLogo } from '@/components/BrandLogo';
 import {
-  Activity,
   ArrowLeft,
   BookOpen,
   CheckCircle2,
@@ -88,22 +88,7 @@ export default async function GuideArticlePage({ params }: GuidePageProps) {
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-[#070d19]/85 border-b border-white/10">
         <div className="max-w-[1100px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-              <Activity className="w-5 h-5 text-slate-950 stroke-[2.5]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-black text-lg tracking-tight text-white">
-                  PITCH<span className="text-emerald-400">PULSE</span>
-                </span>
-                <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
-                  Tactical Hub
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">
-                Match Previews, 2D Pitch Radar, Tactical Breakdowns &amp; xG Analytics
-              </p>
-            </div>
+            <BrandLogo subtitle="Match Previews, 2D Pitch Radar, Tactical Breakdowns & xG Analytics" />
           </Link>
 
           <Link
@@ -224,3 +209,4 @@ export default async function GuideArticlePage({ params }: GuidePageProps) {
     </div>
   );
 }
+

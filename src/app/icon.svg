@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="6" y1="4" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0b172a"/>
+      <stop offset="100%" stop-color="#060b14"/>
+    </linearGradient>
+    <linearGradient id="shieldBorder" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="pulseGlow" x1="12" y1="32" x2="52" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="55%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Rounded Crest Base -->
+  <rect x="3" y="3" width="58" height="58" rx="16" fill="url(#bgGrad)" stroke="url(#shieldBorder)" stroke-width="2.5"/>
+
+  <!-- Subtle Tactical Pitch Markings -->
+  <rect x="10" y="10" width="44" height="44" rx="10" stroke="#10b981" stroke-opacity="0.18" stroke-width="1.2"/>
+  <line x1="32" y1="10" x2="32" y2="54" stroke="#10b981" stroke-opacity="0.18" stroke-width="1.2" stroke-dasharray="2.5 2.5"/>
+
+  <!-- Football / Center Pitch Circle -->
+  <circle cx="32" cy="32" r="14" fill="#10b981" fill-opacity="0.08" stroke="url(#shieldBorder)" stroke-width="2"/>
+
+  <!-- Classic Football Pentagon Center -->
+  <polygon points="32,23.5 39.5,28.8 36.6,37.5 27.4,37.5 24.5,28.8" fill="#10b981" fill-opacity="0.22" stroke="#34d399" stroke-width="1.4" stroke-linejoin="round"/>
+
+  <!-- High-Contrast Tactical Pulse Wave Overlay -->
+  <path d="M11 33H20L24.5 22L30 43L35.5 19L40.5 36.5L44 33H53" stroke="url(#pulseGlow)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Live Telemetry Node Dot -->
+  <circle cx="53" cy="33" r="2.8" fill="#34d399"/>
+</svg>
