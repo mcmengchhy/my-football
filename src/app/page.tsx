@@ -1,16 +1,15 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { Match, StandingRow } from '@/types/football';
-import { LEAGUES, STANDINGS_BY_LEAGUE } from '@/lib/mock-data';
+import { INITIAL_MATCHES, LEAGUES, STANDINGS_BY_LEAGUE } from '@/lib/mock-data';
 import { NICHE_ARTICLES } from '@/lib/niche-content';
 import { TeamCrest } from '@/components/TeamCrest';
 import { BrandLogo } from '@/components/BrandLogo';
 import { MatchCenter } from '@/components/MatchCenter';
-import { NicheContentHub } from '@/components/NicheContentHub';
 import {
-  Activity,
   BookOpen,
   Calendar,
   ChevronRight,
@@ -23,13 +22,24 @@ import {
   Trophy,
 } from 'lucide-react';
 
+const NicheContentHub = dynamic(
+  () => import('@/components/NicheContentHub').then((mod) => mod.NicheContentHub),
+  {
+    loading: () => (
+      <div className="rounded-3xl border border-white/10 bg-[#0d1526]/90 p-8 text-center text-xs text-slate-400 animate-pulse">
+        Loading Tactical Library &amp; Match Guides...
+      </div>
+    ),
+  }
+);
+
 type StatusFilter = 'ALL' | 'LIVE' | 'FT' | 'UPCOMING' | 'PINNED';
 type MainNavSection = 'matches' | 'tactics';
 
 export default function FootballLiveScorePage() {
   const [activeNav, setActiveNav] = useState<MainNavSection>('matches');
-  const [matches, setMatches] = useState<Match[]>([]);
-  const [selectedMatchId, setSelectedMatchId] = useState<string>('');
+  const [matches, setMatches] = useState<Match[]>(INITIAL_MATCHES);
+  const [selectedMatchId, setSelectedMatchId] = useState<string>(INITIAL_MATCHES[0]?.id || '');
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   // Filters
@@ -39,13 +49,14 @@ export default function FootballLiveScorePage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [pinnedIds, setPinnedIds] = useState<string[]>([]);
 
-  // Standings state (Top 5 European Leagues + UCL)
+  // Standings state (Top 5 European Leagues + UCL) — pre-seeded for instant SSR & LCP
   const [standingsLeague, setStandingsLeague] = useState<string>('epl');
-  const [liveStandings, setLiveStandings] = useState<Record<string, StandingRow[]>>({});
-  const [isFetchingStandings, setIsFetchingStandings] = useState<boolean>(true);
+  const [liveStandings, setLiveStandings] =
+    useState<Record<string, StandingRow[]>>(STANDINGS_BY_LEAGUE);
+  const [isFetchingStandings, setIsFetchingStandings] = useState<boolean>(false);
 
-  // Loading state
-  const [isFetchingMatches, setIsFetchingMatches] = useState<boolean>(true);
+  // Loading state — pre-seeded with INITIAL_MATCHES for zero-CLS SSR HTML
+  const [isFetchingMatches, setIsFetchingMatches] = useState<boolean>(false);
 
   // Load saved pins from localStorage on mount
   useEffect(() => {
@@ -179,6 +190,16 @@ export default function FootballLiveScorePage() {
     [matches]
   );
 
+  const ftCount = useMemo(
+    () => matches.filter((m) => m.status === 'FT').length,
+    [matches]
+  );
+
+  const upcomingCount = useMemo(
+    () => matches.filter((m) => m.status === 'UPCOMING').length,
+    [matches]
+  );
+
   const selectedMatch = useMemo(
     () => matches.find((m) => m.id === selectedMatchId) || matches[0],
     [matches, selectedMatchId]
@@ -300,7 +321,31 @@ export default function FootballLiveScorePage() {
       </header>
 
       {/* MAIN WORKSPACE */}
-      <main className="relative z-10 flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 py-6">
+      <main className="relative z-10 flex-1 max-w-[1480px] w-full mx-auto px-4 sm:px-6 py-5 space-y-5">
+        {/* SEO Hero Heading & Live Matchday Status Bar */}
+        <div className="rounded-2xl border border-white/10 bg-[#0b1323]/90 px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h1 className="text-xs sm:text-sm font-extrabold text-white tracking-tight">
+              PitchPulse • Live European Football Scores, Match Previews &amp; 2D Tactical Hub
+            </h1>
+            <p className="text-[11px] text-slate-400">
+              Real-time fixtures, 3-2-5 tactical breakdowns, expected goals (xG), and official standings across the Premier League, LaLiga, Serie A, Bundesliga, Ligue 1 &amp; Champions League.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0 text-[11px]">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+              {liveCount} Live
+            </span>
+            <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300 font-semibold">
+              {upcomingCount} Upcoming
+            </span>
+            <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-400 font-semibold">
+              {ftCount} FT
+            </span>
+          </div>
+        </div>
+
         {activeNav !== 'matches' ? (
           <NicheContentHub />
         ) : (
@@ -544,6 +589,40 @@ export default function FootballLiveScorePage() {
                   </table>
                 </div>
               </div>
+
+              {/* Crawlable Tactical Guides Widget for Internal Linking & SEO */}
+              <div className="rounded-3xl border border-white/10 bg-[#0d1526]/90 backdrop-blur-xl p-4 shadow-xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+                    Tactical Guides &amp; Analysis
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setActiveNav('tactics')}
+                    className="text-[10px] font-bold text-emerald-400 hover:underline cursor-pointer"
+                  >
+                    View Hub →
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {NICHE_ARTICLES.slice(0, 4).map((art) => (
+                    <Link
+                      key={art.id}
+                      href={`/guides/${art.slug}`}
+                      className="block p-2.5 rounded-2xl bg-white/[0.02] hover:bg-white/[0.06] border border-white/5 hover:border-emerald-500/30 transition-all"
+                    >
+                      <div className="flex items-center justify-between text-[9px] font-extrabold uppercase text-emerald-400 mb-0.5">
+                        <span>{art.category}</span>
+                        <span className="text-slate-500">{art.readTime}</span>
+                      </div>
+                      <div className="text-xs font-bold text-slate-200 line-clamp-2 leading-snug">
+                        {art.title}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </aside>
 
             {/* CENTER COLUMN: LIVE SCOREBOARD FEED (4 cols on lg) */}
@@ -580,10 +659,10 @@ export default function FootballLiveScorePage() {
                 <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar">
                   {(
                     [
-                      { id: 'ALL', label: 'All' },
+                      { id: 'ALL', label: 'All', count: matches.length },
                       { id: 'LIVE', label: 'Live', count: liveCount },
-                      { id: 'FT', label: 'Finished' },
-                      { id: 'UPCOMING', label: 'Upcoming' },
+                      { id: 'FT', label: 'Finished', count: ftCount },
+                      { id: 'UPCOMING', label: 'Upcoming', count: upcomingCount },
                       { id: 'PINNED', label: 'Pinned', count: pinnedIds.length },
                     ] as { id: StatusFilter; label: string; count?: number }[]
                   ).map((tab) => {

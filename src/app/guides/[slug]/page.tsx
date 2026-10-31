@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { NICHE_ARTICLES } from '@/lib/niche-content';
+import { SITE_NAME, SITE_URL } from '@/lib/site-config';
 import { BrandLogo } from '@/components/BrandLogo';
 import {
   ArrowLeft,
@@ -28,12 +29,15 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
 
   if (!article) {
     return {
-      title: 'Tactical Guide Not Found • PitchPulse',
+      title: 'Tactical Guide Not Found',
     };
   }
 
+  const canonicalPath = `/guides/${article.slug}`;
+  const fullUrl = `${SITE_URL}${canonicalPath}`;
+
   return {
-    title: `${article.title} | PitchPulse Tactical Hub`,
+    title: article.title,
     description: article.excerpt,
     keywords: [
       article.seoKeyword,
@@ -41,12 +45,33 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
       article.tacticalBoard.formation,
       'football tactical analysis',
       'expected goals xG',
+      SITE_NAME,
     ],
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
       title: article.title,
       description: article.excerpt,
+      url: fullUrl,
+      siteName: SITE_NAME,
       type: 'article',
       publishedTime: new Date(article.publishedAt).toISOString(),
+      authors: ['PitchPulse Tactical Analysis Desk'],
+      images: [
+        {
+          url: '/logo.svg',
+          width: 512,
+          height: 512,
+          alt: article.title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.excerpt,
+      images: ['/logo.svg'],
     },
   };
 }
@@ -60,21 +85,60 @@ export default async function GuideArticlePage({ params }: GuidePageProps) {
   }
 
   const relatedArticles = NICHE_ARTICLES.filter((a) => a.id !== article.id).slice(0, 3);
+  const articleUrl = `${SITE_URL}/guides/${article.slug}`;
+  const publishedIso = new Date(article.publishedAt).toISOString();
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: article.title,
-    description: article.excerpt,
-    datePublished: new Date(article.publishedAt).toISOString(),
-    author: {
-      '@type': 'Organization',
-      name: 'PitchPulse Tactical Analysis Desk',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'PitchPulse',
-    },
+    '@graph': [
+      {
+        '@type': 'Article',
+        '@id': `${articleUrl}#article`,
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': articleUrl,
+        },
+        headline: article.title,
+        description: article.excerpt,
+        keywords: article.seoKeyword,
+        articleSection: article.category,
+        datePublished: publishedIso,
+        dateModified: publishedIso,
+        inLanguage: 'en-US',
+        image: `${SITE_URL}/logo.svg`,
+        author: {
+          '@type': 'Organization',
+          name: 'PitchPulse Tactical Analysis Desk',
+          url: SITE_URL,
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          url: SITE_URL,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${SITE_URL}/logo.svg`,
+          },
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Live Match Center',
+            item: SITE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: article.title,
+            item: articleUrl,
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -103,6 +167,15 @@ export default async function GuideArticlePage({ params }: GuidePageProps) {
 
       {/* Main Article Content */}
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {/* Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="text-xs text-slate-400 flex items-center gap-2">
+          <Link href="/" className="hover:text-emerald-400 transition-colors">
+            PitchPulse Home
+          </Link>
+          <span>/</span>
+          <span className="text-slate-300 truncate">{article.title}</span>
+        </nav>
+
         <article className="rounded-3xl border border-white/10 bg-[#0d1526]/95 backdrop-blur-xl p-6 sm:p-10 shadow-2xl space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-white/10">
             <div className="flex items-center gap-2">
@@ -113,7 +186,9 @@ export default async function GuideArticlePage({ params }: GuidePageProps) {
                 <Clock className="w-3 h-3" /> {article.readTime}
               </span>
             </div>
-            <span className="text-xs text-slate-400">Published {article.publishedAt}</span>
+            <time dateTime={publishedIso} className="text-xs text-slate-400">
+              Published {article.publishedAt}
+            </time>
           </div>
 
           <div className="space-y-3">
@@ -209,4 +284,3 @@ export default async function GuideArticlePage({ params }: GuidePageProps) {
     </div>
   );
 }
-
