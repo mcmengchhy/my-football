@@ -152,7 +152,7 @@ export function BrandLogo({
           <span
             className={`${
               isSmall ? 'text-sm' : 'text-lg'
-            } font-black tracking-tight text-white flex items-center`}
+            } font-black tracking-tight text-white inline-block whitespace-nowrap`}
           >
             PITCH
             <span className="bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">

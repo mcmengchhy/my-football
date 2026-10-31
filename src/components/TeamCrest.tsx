@@ -10,10 +10,10 @@ interface TeamCrestProps {
 }
 
 const SIZE_MAP = {
-  sm: { box: 'w-6 h-6', text: 'text-[9px]' },
-  md: { box: 'w-8 h-8', text: 'text-[10px]' },
-  lg: { box: 'w-11 h-11', text: 'text-xs' },
-  xl: { box: 'w-14 h-14', text: 'text-sm' },
+  sm: { box: 'w-6 h-6', px: 24, text: 'text-[9px]' },
+  md: { box: 'w-8 h-8', px: 32, text: 'text-[10px]' },
+  lg: { box: 'w-11 h-11', px: 44, text: 'text-xs' },
+  xl: { box: 'w-14 h-14', px: 56, text: 'text-sm' },
 };
 
 export function TeamCrest({ team, size = 'md', className = '' }: TeamCrestProps) {
@@ -30,7 +30,11 @@ export function TeamCrest({ team, size = 'md', className = '' }: TeamCrestProps)
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={team.crestUrl}
-          alt={team.name}
+          alt={`${team.name} crest`}
+          width={s.px}
+          height={s.px}
+          loading="lazy"
+          decoding="async"
           onError={() => setImgError(true)}
           className="w-full h-full object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
         />
@@ -43,7 +47,13 @@ export function TeamCrest({ team, size = 'md', className = '' }: TeamCrestProps)
       className={`relative inline-flex items-center justify-center shrink-0 select-none ${s.box} ${className}`}
       title={team.name}
     >
-      <svg viewBox="0 0 40 44" className="w-full h-full drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]">
+      <svg
+        viewBox="0 0 40 44"
+        width={s.px}
+        height={s.px}
+        aria-hidden="true"
+        className="w-full h-full drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]"
+      >
         <defs>
           <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor={team.primaryColor} />

@@ -71,6 +71,41 @@ function parseFormString(rawForm?: string | null): ('W' | 'D' | 'L')[] {
   return tokens.length > 0 ? tokens.slice(-5) : ['W', 'D', 'W', 'W', 'L'];
 }
 
+function buildSyntheticEvents(
+  matchId: string,
+  homeShort: string,
+  awayShort: string,
+  homeScore: number,
+  awayScore: number,
+  maxMinute = 90
+): MatchEvent[] {
+  const events: MatchEvent[] = [];
+  const totalGoals = Math.min(homeScore + awayScore, 10);
+  if (totalGoals <= 0) return events;
+
+  let h = 0;
+  let a = 0;
+  for (let i = 0; i < totalGoals; i++) {
+    const isHomeGoal = h < homeScore && (a >= awayScore || i % 2 === 0);
+    if (isHomeGoal) h++;
+    else a++;
+    const minute = Math.max(
+      4,
+      Math.min(maxMinute, Math.round(((i + 1) / (totalGoals + 1)) * maxMinute))
+    );
+    events.push({
+      id: `${matchId}-ev-${i}`,
+      minute,
+      team: isHomeGoal ? 'home' : 'away',
+      type: 'goal',
+      player: `${isHomeGoal ? homeShort : awayShort} Scorer`,
+      detail: 'Open-play clinical finish inside the penalty area',
+      scoreSnapshot: `${h} - ${a}`,
+    });
+  }
+  return events;
+}
+
 function buildSyntheticMomentum(seed: number, minute: number, events: MatchEvent[]): MomentumPoint[] {
   const maxMin = Math.max(1, Math.min(90, minute || 45));
   const points: MomentumPoint[] = [];
@@ -543,7 +578,17 @@ export async function fetchFromFootballDataOrg(
       dateOffset,
       venue: m.venue || `${homeName} Stadium`,
       referee: m.referees?.[0]?.name || undefined,
-      events: [],
+      events:
+        status === 'UPCOMING'
+          ? []
+          : buildSyntheticEvents(
+              `fd-${m.id || idx}`,
+              homeName,
+              awayName,
+              homeScore,
+              awayScore,
+              minute || 90
+            ),
       stats: [
         { label: 'Ball Possession', home: 54, away: 46, unit: '%' },
         { label: 'Expected Goals (xG)', home: homeXg, away: awayXg, isDecimal: true },
@@ -551,7 +596,21 @@ export async function fetchFromFootballDataOrg(
         { label: 'Shots on Target', home: homeScore + 3, away: awayScore + 2 },
         { label: 'Corner Kicks', home: 6, away: 4 },
       ],
-      momentum: status === 'UPCOMING' ? [] : buildSyntheticMomentum(idx + 19, minute || 45, []),
+      momentum:
+        status === 'UPCOMING'
+          ? []
+          : buildSyntheticMomentum(
+              idx + 19,
+              minute || 45,
+              buildSyntheticEvents(
+                `fd-${m.id || idx}`,
+                homeName,
+                awayName,
+                homeScore,
+                awayScore,
+                minute || 90
+              )
+            ),
       lineups: {
         home: {
           formation: '4-3-3',

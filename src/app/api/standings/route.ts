@@ -14,28 +14,37 @@ export async function GET(req: NextRequest) {
     process.env.FOOTBALL_DATA_API_KEY?.trim() ||
     DEFAULT_FD_KEY;
 
+  const cacheHeaders: Record<string, string> = forceRefresh
+    ? { 'Cache-Control': 'no-store' }
+    : { 'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=86400' };
+
   try {
     const result = await fetchStandingsFromFootballDataOrg(
       footballDataKey,
       league,
       forceRefresh
     );
-    return NextResponse.json({
-      league,
-      standings: result.standings,
-      cached: result.cached,
-      cachedAt: result.cachedAt,
-      source: result.source,
-    });
+    return NextResponse.json(
+      {
+        league,
+        standings: result.standings,
+        cached: result.cached,
+        cachedAt: result.cachedAt,
+        source: result.source,
+      },
+      { status: 200, headers: cacheHeaders }
+    );
   } catch (err: any) {
-    return NextResponse.json({
-      league,
-      standings: STANDINGS_BY_LEAGUE[league] || STANDINGS_BY_LEAGUE.epl,
-      cached: true,
-      cachedAt: new Date().toISOString(),
-      source: 'fallback-cache',
-      warning: err?.message,
-    });
+    return NextResponse.json(
+      {
+        league,
+        standings: STANDINGS_BY_LEAGUE[league] || STANDINGS_BY_LEAGUE.epl,
+        cached: true,
+        cachedAt: new Date().toISOString(),
+        source: 'fallback-cache',
+        warning: err?.message,
+      },
+      { status: 200, headers: cacheHeaders }
+    );
   }
 }
-

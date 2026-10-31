@@ -62,7 +62,10 @@ export function MatchCenter({ match, onCloseMobile }: MatchCenterProps) {
   const shareText = `${match.homeTeam.name} vs ${match.awayTeam.name} (${match.league.name}) — Tactical Preview, xG Insights & Key Battles on PitchPulse`;
 
   function handleShare(platform: 'x' | 'reddit' | 'copy') {
-    const url = typeof window !== 'undefined' ? window.location.href : 'https://pitchpulse.football';
+    const url =
+      typeof window !== 'undefined'
+        ? window.location.href
+        : 'https://my-football-yusto.vercel.app';
     if (platform === 'x') {
       window.open(
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(url)}`,
