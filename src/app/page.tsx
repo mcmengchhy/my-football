@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Match, StandingRow } from '@/types/football';
 import { INITIAL_MATCHES, LEAGUES, STANDINGS_BY_LEAGUE } from '@/lib/mock-data';
 import { NICHE_ARTICLES } from '@/lib/niche-content';
+import { TARGET_KEYWORDS } from '@/lib/keywords';
 import { TeamCrest } from '@/components/TeamCrest';
 import { BrandLogo } from '@/components/BrandLogo';
 import { MatchCenter } from '@/components/MatchCenter';
@@ -253,6 +254,13 @@ export default function FootballLiveScorePage() {
                 </button>
               );
             })}
+            <Link
+              href="/keywords"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 text-slate-300 hover:text-white hover:bg-white/5 transition-all"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Topics &amp; Keywords</span>
+            </Link>
           </nav>
 
           {/* Search Bar & Refresh */}
@@ -1078,19 +1086,60 @@ export default function FootballLiveScorePage() {
           </div>
 
           {/* Direct Crawlable SEO Links for Search Engines */}
-          <div className="pt-4 border-t border-white/5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-slate-500">
-            <span className="font-bold uppercase tracking-wider text-slate-400">
-              Featured Guides:
-            </span>
-            {NICHE_ARTICLES.map((art) => (
+          <div className="pt-4 border-t border-white/5 space-y-3 text-[11px] text-slate-500">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+              <span className="font-bold uppercase tracking-wider text-slate-400">
+                Featured Guides:
+              </span>
+              {NICHE_ARTICLES.map((art) => (
+                <Link
+                  key={art.id}
+                  href={`/guides/${art.slug}`}
+                  className="hover:text-emerald-400 transition-colors"
+                >
+                  {art.seoKeyword}
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-2 border-t border-white/[0.03]">
               <Link
-                key={art.id}
-                href={`/guides/${art.slug}`}
-                className="hover:text-emerald-400 transition-colors"
+                href="/keywords"
+                className="font-bold text-emerald-400 hover:text-emerald-300 transition-colors uppercase tracking-wider"
               >
-                {art.seoKeyword}
+                Keyword &amp; Topics Hub →
               </Link>
-            ))}
+              {TARGET_KEYWORDS.slice(0, 6).map((k) => (
+                <Link
+                  key={k.slug}
+                  href={`/keywords/${k.slug}`}
+                  className="hover:text-slate-300 transition-colors"
+                >
+                  {k.keyword}
+                </Link>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-slate-600 pt-1">
+              <span>Sitemaps:</span>
+              <a
+                href="/sitemap.xml"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-slate-400"
+              >
+                /sitemap.xml (Main)
+              </a>
+              <span className="text-slate-700">•</span>
+              <a
+                href="/key_sitemap.xml"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-slate-400 text-emerald-400/80 hover:text-emerald-300 font-medium"
+              >
+                /key_sitemap.xml (Keywords)
+              </a>
+            </div>
           </div>
         </div>
       </footer>

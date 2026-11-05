@@ -10,6 +10,22 @@ const nextConfig = {
       { protocol: 'https', hostname: 'upload.wikimedia.org' },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/key_sitemap',
+        destination: '/key_sitemap.xml',
+      },
+      {
+        source: '/key-sitemap.xml',
+        destination: '/key_sitemap.xml',
+      },
+      {
+        source: '/key-sitemap',
+        destination: '/key_sitemap.xml',
+      },
+    ];
+  },
   async headers() {
     return [
       {
