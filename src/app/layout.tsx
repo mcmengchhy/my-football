@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { NICHE_ARTICLES } from '@/lib/niche-content';
 import {
+  BING_SITE_VERIFICATION,
   GOOGLE_SITE_VERIFICATION,
   SITE_ALTERNATE_NAME,
   SITE_NAME,
@@ -50,6 +51,9 @@ export const metadata: Metadata = {
   },
   verification: {
     google: GOOGLE_SITE_VERIFICATION,
+    other: {
+      'msvalidate.01': BING_SITE_VERIFICATION,
+    },
   },
   robots: {
     index: true,
