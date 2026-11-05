@@ -21,6 +21,11 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/api/'],
       },
+      {
+        userAgent: 'Bingbot',
+        allow: '/',
+        disallow: ['/api/'],
+      },
     ],
     host: hostname,
     sitemap: [
